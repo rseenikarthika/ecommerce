@@ -1,8 +1,4 @@
-from datetime import datetime
-from decimal import Decimal
-
 from rest_framework import serializers
-from rest_framework.utils import json
 from .models import *
 
 
@@ -36,10 +32,8 @@ class ProductGenericSerializer(serializers.Serializer):
     description = serializers.CharField()
     logo = serializers.CharField()
     type = serializers.IntegerField()
-    review_max = serializers.DecimalField(max_digits=16, decimal_places=2)
+    # review_max = serializers.DecimalField(max_digits=16, decimal_places=2)
     review_value = serializers.DecimalField(max_digits=16, decimal_places=2)
-    review_avg_max = serializers.DecimalField(max_digits=16, decimal_places=2)
-    review_avg_value = serializers.DecimalField(max_digits=16, decimal_places=2)
     category_data = serializers.JSONField()
     brand_data = serializers.JSONField()
 
@@ -51,9 +45,7 @@ class ProductGenericSerializer(serializers.Serializer):
             'description': instance.description,
             'logo': instance.logo,
             # 'review_max': instance.review_max_data,
-            # 'review_value': instance.review_value_data,
-            # 'review_avg_max': instance.review_avg_max_data,
-            # 'review_avg_value': instance.review_max_value_data,
+            'review_avg_max': instance.review_avg_max_data,
             'category_data': instance.category_data,
             'brand_data': instance.brand_data,
         }

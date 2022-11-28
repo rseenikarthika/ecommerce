@@ -47,7 +47,6 @@ class ProductReview(models.Model):
     product = models.ForeignKey(Products, on_delete=models.PROTECT,
                                 related_name='product_review_product_id_rel')
     max = models.DecimalField(max_digits=8, decimal_places=2, blank=False, null=False)
-    value = models.DecimalField(max_digits=8, decimal_places=2, blank=False, null=False)
     comment = models.CharField(max_length=4000, blank=True, null=True)
 
     class Meta:
