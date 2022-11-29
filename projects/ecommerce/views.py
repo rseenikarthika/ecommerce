@@ -15,7 +15,6 @@ from .serializers import ProductSerializer, ProductGenericSerializer
 class CustomPagination(PageNumberPagination):
     page_size = 50
     page_size_query_param = 'page_size'
-
     def get_paginated_response(self, data):
         resDict = {
             'count': self.page.paginator.count,
