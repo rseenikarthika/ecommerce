@@ -1,6 +1,6 @@
 from decimal import Decimal
 
-from django.db.models import F, Q, Func, OuterRef, Subquery
+from django.db.models import F, Q, Func, OuterRef, Subquery, Max
 from django.db.models.functions import JSONObject, Coalesce
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
@@ -91,6 +91,10 @@ class ProductViewSet(viewsets.ModelViewSet):
                     data=Coalesce(Func('max', function='Avg'), Decimal(0))).values('data')
                                              ),
             )
+            if "sort_by" in self.request.GET and (self.request.GET['sort_by']).lower() == 'popularity':
+                query_set = query_set.order_by('-review_avg_max_data')
+            if "reviews" in self.request.GET and len(self.request.GET['reviews']) > 0:
+                query_set = query_set.filter(review_avg_max_data__gte=self.request.GET['reviews'])
             return query_set
 
     @swagger_auto_schema(manual_parameters=[
@@ -104,6 +108,7 @@ class ProductViewSet(viewsets.ModelViewSet):
         openapi.Parameter('category', openapi.IN_QUERY, type=openapi.TYPE_NUMBER, description="Enter Category Id"),
         openapi.Parameter('category_name', openapi.IN_QUERY, type=openapi.TYPE_STRING,
                           description="Enter Category Name"),
+        openapi.Parameter('reviews', openapi.IN_QUERY, type=openapi.TYPE_STRING, description="Enter Reviews"),
     ], responses={
         '200': openapi.Response(description="STATUS SUCCESS", examples={
             "application/json": {"status": "string", "message": "string", "more_info": {},
